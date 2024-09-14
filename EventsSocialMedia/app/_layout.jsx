@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { Stack, useRouter } from "expo-router";
+import { getUserData } from "../services/userService";
 
 const _layout = () => {
   return (
@@ -13,7 +14,7 @@ const _layout = () => {
 };
 
 const MainLayout = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, setUserData } = useAuth();
   const router = useRouter();
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
@@ -21,6 +22,7 @@ const MainLayout = () => {
 
       if (session) {
         setAuth(session?.user);
+        updateUserData(session?.user);
         router.replace("/home");
       } else {
         setAuth(null);
@@ -28,6 +30,13 @@ const MainLayout = () => {
       }
     });
   }, []);
+
+  const updateUserData = async (user) => {
+    let res = await getUserData(user?.id);
+    // console.log("got user data: ", res);
+    if (res.success) setUserData(res.data);
+  };
+
   return (
     <Stack
       screenOptions={{

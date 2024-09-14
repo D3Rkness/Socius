@@ -11,7 +11,7 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import { supabase } from "../lib/supabase";
 
-const signUp = () => {
+const SignUp = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -108,7 +108,7 @@ const signUp = () => {
   );
 };
 
-export default signUp;
+export default SignUp;
 
 const styles = StyleSheet.create({
   container: {

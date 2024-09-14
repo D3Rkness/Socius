@@ -7,7 +7,7 @@ import { theme } from "../constants/theme";
 import Button from "../components/Button";
 import { router } from "expo-router";
 
-const welcome = () => {
+const Welcome = () => {
   return (
     <ScreenWrapper bg="white">
       <StatusBar style="dark" />
@@ -54,7 +54,7 @@ const welcome = () => {
   );
 };
 
-export default welcome;
+export default Welcome;
 
 const styles = StyleSheet.create({
   container: {
