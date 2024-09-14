@@ -5,13 +5,13 @@ import { supabaseUrl } from "../constants";
 
 export const getUserImageSrc = (imagePath) => {
   if (imagePath) {
-    return getSupabaseFireURL(imagePath);
+    return getSupabaseFileUrl(imagePath);
   } else {
     return require("../assets/images/defaultUser.png");
   }
 };
 
-export const getSupabaseFireURL = (firePath) => {
+export const getSupabaseFileUrl = (firePath) => {
   if (firePath) {
     return {
       uri: `${supabaseUrl}/storage/v1/object/public/uploads/${firePath}`,

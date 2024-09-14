@@ -1,32 +1,74 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ScreenWrapper from "../../components/ScreenWrapper";
+// import Button from "../../components/Button";
 import { useAuth } from "../../contexts/AuthContext";
-import { supabase } from "../../lib/supabase";
-import { Button } from "@rneui/themed";
+// import { supabase } from "../../lib/supabase";
 import { hp, wp } from "../../helpers/common";
-import Icon from "../../assets/icons";
 import { theme } from "../../constants/theme";
+import Icon from "../../assets/icons";
 import { useRouter } from "expo-router";
 import Avatar from "../../components/Avatar";
+import { fetchPosts } from "../../services/postService";
+import { FlatList } from "react-native";
+import PostCard from "../../components/PostCard";
+import Loading from "../../components/Loading";
+import { supabase } from "../../lib/supabase";
+import { getUserData } from "../../services/userService";
+var limit = 0;
 
-const home = () => {
+const Home = () => {
   const { user, setAuth } = useAuth();
   const router = useRouter();
 
-  console.log("user: ", user);
+  const [posts, setPosts] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const handlePostEvent = async (payload) => {
+    if (payload.eventType === "INSERT" && payload?.new?.id) {
+      let newPost = { ...payload.new };
+      console.log("User ID in new post: ", newPost.userid); // Corrected key name
 
-  //   const onLogout = async () => {
-  //     const { error } = await supabase.auth.signOut();
-  //     if (error) {
-  //       Alert.alert("Sign out", "Error signing out");
-  //     }
-  //   };
+      if (newPost.userid) {
+        let res = await getUserData(newPost.userid);
+        console.log("User data response: ", res);
 
+        newPost.user = res.success ? res.data : {};
+        setPosts((prevPosts) => [newPost, ...prevPosts]);
+      } else {
+        console.error("userId is undefined for the new post");
+      }
+    }
+  };
+  useEffect(() => {
+    let postChannel = supabase
+      .channel("posts")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "posts" },
+        handlePostEvent
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(postChannel);
+    };
+  }, []);
+
+  const getPost = async () => {
+    if (!hasMore) return null;
+    limit = limit + 4;
+    console.log("fetching posts : ", limit);
+    let res = await fetchPosts(limit);
+    // console.log("posts : ", res);
+    // console.log("user : ",res.data[0].user)
+    if (res.data) {
+      if (posts.length == res.data.length) setHasMore(false);
+      setPosts(res.data);
+    }
+  };
   return (
     <ScreenWrapper bg="white">
       <View style={styles.container}>
-        {/* header */}
         <View style={styles.header}>
           <Text style={styles.title}>Home</Text>
           <View style={styles.icons}>
@@ -50,24 +92,50 @@ const home = () => {
               <Avatar
                 uri={user?.image}
                 size={hp(4.3)}
-                rounded={theme.radius.sm}
-                style={styles.avatarImage}
+                rounded={theme.radius.Sm}
+                style={{ borderWidth: 2 }}
               />
             </Pressable>
           </View>
         </View>
+
+        <FlatList
+          data={posts}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listStyle}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <PostCard item={item} currentUser={user} router={router} />
+          )}
+          onEndReached={() => {
+            getPost();
+            console.log("Reached End");
+          }}
+          onEndReachedThreshold={0}
+          ListFooterComponent={
+            hasMore ? (
+              <View style={{ marginVertical: posts.length == 0 ? 200 : 30 }}>
+                <Loading />
+              </View>
+            ) : (
+              <View style={{ marginVertical: 30 }}>
+                <Text style={styles.noPosts}>No More Posts</Text>
+              </View>
+            )
+          }
+        />
       </View>
-      <Text>home</Text>
-      {/* <Button title="logout" onPress={onLogout} /> */}
+      {/* <Button title="Logout" onPress={onLogout} /> */}
     </ScreenWrapper>
   );
 };
 
-export default home;
+export default Home;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // paddingHorizontal: wp(4)
   },
   header: {
     flexDirection: "row",
@@ -84,7 +152,7 @@ const styles = StyleSheet.create({
   avatarImage: {
     height: hp(4.3),
     width: hp(4.3),
-    borderRadius: theme.radius.sm,
+    borderRadius: theme.radius.Sm,
     borderCurve: "continuous",
     borderColor: theme.colors.gray,
     borderWidth: 3,
@@ -95,18 +163,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 18,
   },
+
   listStyle: {
     paddingTop: 20,
     paddingHorizontal: wp(4),
   },
+
   noPosts: {
     fontSize: hp(2),
-    texAlign: "center",
+    textAlign: "center",
     color: theme.colors.text,
-  },
-  pill: {
-    position: "absolute",
-    right: -10,
-    top: -4,
   },
 });

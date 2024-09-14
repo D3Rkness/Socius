@@ -56,7 +56,7 @@ const UserHeader = ({ user, router, handleLayout }) => {
     >
       {/* Header */}
       <View>
-        <Header title="Profile" mb={30} />
+        <Header title="Profile" mb={30} showBackButton={true} />
         <TouchableOpacity style={styles.logoutButton} onPress={handleLayout}>
           <Icon name="logout" color={theme.colors.rose} />
         </TouchableOpacity>
