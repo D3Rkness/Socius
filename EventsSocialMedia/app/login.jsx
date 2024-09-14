@@ -1,5 +1,5 @@
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { theme } from "../constants/theme";
 import Icon from "../assets/icons";
@@ -9,17 +9,34 @@ import { useRouter } from "expo-router";
 import { hp, wp } from "../helpers/common";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import { supabase } from "../lib/supabase";
 
-const login = () => {
+const Login = () => {
   const router = useRouter();
-  const emailRef = useRef("");
-  const passwordRef = useRef("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
-    if (!emailRef.current || !passwordRef.current) {
+    if (!email || !password) {
       Alert.alert("Login", "Please fill all the fields!");
       return;
+    }
+
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: trimmedEmail,
+      password: trimmedPassword,
+    });
+
+    setLoading(false);
+
+    console.log("error: ", error);
+    if (error) {
+      Alert.alert("Login", error.message);
     }
   };
 
@@ -29,27 +46,29 @@ const login = () => {
       <View style={styles.container}>
         <BackButton router={router} />
 
-        {/* welcome */}
+        {/* Welcome */}
         <View>
           <Text style={styles.welcomeText}>Hey,</Text>
           <Text style={styles.welcomeText}>Welcome Back,</Text>
         </View>
 
-        {/* form */}
+        {/* Form */}
         <View style={styles.form}>
-          <Text style={{ fontSze: hp(1.5), color: theme.colors.text }}>
+          <Text style={{ fontSize: hp(1.5), color: theme.colors.text }}>
             Please login to continue
           </Text>
           <Input
             icon={<Icon name="mail" size={26} strokeWidth={1.6} />}
             placeholder="Enter your email"
-            onChangeText={(value) => (emailRef.current = value)}
+            onChangeText={setEmail} // Using useState setter
+            value={email}
           />
           <Input
             icon={<Icon name="lock" size={26} strokeWidth={1.6} />}
             placeholder="Enter your password"
             secureTextEntry
-            onChangeText={(value) => (passwordRef.current = value)}
+            onChangeText={setPassword} // Using useState setter
+            value={password}
           />
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
 
@@ -77,7 +96,7 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;
 
 const styles = StyleSheet.create({
   container: {

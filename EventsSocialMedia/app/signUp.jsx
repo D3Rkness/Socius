@@ -36,12 +36,14 @@ const signUp = () => {
     } = await supabase.auth.signUp({
       email: trimmedEmail,
       password: trimmedPassword,
+      options: {
+        data: {
+          name: trimmedName,
+        },
+      },
     });
 
     setLoading(false);
-
-    console.log("session: ", session);
-    console.log("error: ", error);
 
     if (error) {
       Alert.alert("Sign up", error.message);
