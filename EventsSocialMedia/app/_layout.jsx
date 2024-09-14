@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { Stack, useRouter } from "expo-router";
-import { getUserData } from "../services/userService";
 
 const _layout = () => {
   return (
