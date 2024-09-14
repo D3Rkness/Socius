@@ -86,6 +86,11 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
       }
     }
   };
+
+  useEffect(() => {
+    setLikes(item?.postLikes || []);
+  }, [item?.postLikes]);
+
   const liked = likes.filter((like) => like.userId == currentUser?.id)[0]
     ? true
     : false;
