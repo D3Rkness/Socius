@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import ScreenWrapper from "../../components/ScreenWrapper";
 import { useAuth } from "../../contexts/AuthContext";
@@ -9,6 +9,7 @@ import { theme } from "../../constants/theme";
 import { supabase } from "../../lib/supabase";
 import Icon from "../../assets/icons";
 import { Button } from "@rneui/themed";
+import Avatar from "../../components/Avatar";
 
 const Profile = () => {
   const { user, setAuth } = useAuth();
@@ -48,13 +49,31 @@ const UserHeader = ({ user, router, handleLogout }) => {
       style={{ flex: 1, backgroundColor: "white", paddingHorizontal: wp(4) }}
     >
       <View>
-        <Header title="Profile" showBackButton={true} />
+        <Header title="Profile" showBackButton={true} mb={30} />
         <Button
           icon={<Icon name="logout" color={theme.colors.rose} />}
           buttonStyle={styles.logoutButton}
           onPress={handleLogout}
           type="clear"
         />
+      </View>
+      <View style={styles.container}>
+        <View style={{ gap: 15 }}>
+          <View style={styles.avatarContainer}>
+            <Avatar
+              uri={user?.image}
+              size={hp(12)}
+              rounded={theme.radius.xxl * 1.4}
+            />
+            <Pressable
+              style={styles.editIcon}
+              onPress={() => router.push("editProfile")}
+            >
+              <Icon name="edit" strokeWidth={2.5} size={20} />
+            </Pressable>
+          </View>
+          <View style={{ alignItems: "center", gap: 4 }}></View>
+        </View>
       </View>
     </View>
   );
