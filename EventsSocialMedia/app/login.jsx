@@ -49,7 +49,7 @@ const login = () => {
             icon={<Icon name="lock" size={26} strokeWidth={1.6} />}
             placeholder="Enter your password"
             secureTextEntry
-            onChangeText={(value) => (emailRef.current = value)}
+            onChangeText={(value) => (passwordRef.current = value)}
           />
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
 
