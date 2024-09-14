@@ -89,7 +89,7 @@ const NewPost = () => {
     let data = {
       file,
       body: bodyRef.current,
-      userid: user?.id,
+      userId: user?.id,
     };
 
     // create post

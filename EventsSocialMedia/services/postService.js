@@ -64,30 +64,30 @@ export const createPostLike = async (postLike) => {
 
     if (error) {
       console.log("post like error", error);
-      return { success: false, msg: "could not like post" };
+      return { success: false, msg: "could not like the post" };
     }
     return { success: true, data: data };
   } catch (error) {
     console.log("post like error", error);
-    return { success: false, msg: "could not like post" };
+    return { success: false, msg: "could not like the post" };
   }
 };
 
-export const removePostLike = async (postid, userid) => {
+export const removePostLike = async (postId, userId) => {
   try {
     const { error } = await supabase
       .from("postLikes")
       .delete()
-      .eq("userid", userid)
-      .eq("postid", postid);
+      .eq("userId", userId)
+      .eq("postId", postId);
 
     if (error) {
       console.log("post like error", error);
-      return { success: false, msg: "could not unlike post" };
+      return { success: false, msg: "could not unlike the post" };
     }
     return { success: true };
   } catch (error) {
     console.log("post like error", error);
-    return { success: false, msg: "could not unlike post" };
+    return { success: false, msg: "could not unlike the post" };
   }
 };

@@ -1,6 +1,13 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Share,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import { hp, wp } from "../helpers/common";
+import { hp, stripHtmlTags, wp } from "../helpers/common";
 import { theme } from "../constants/theme";
 import Avatar from "./Avatar";
 import moment from "moment";
@@ -8,7 +15,7 @@ import Icon from "../assets/icons";
 import RenderHTML from "react-native-render-html";
 import { color } from "@rneui/themed/dist/config";
 import { Image } from "expo-image";
-import { getSupabaseFileUrl } from "../services/imageService";
+import { downloadFile, getSupabaseFileUrl } from "../services/imageService";
 import { Video } from "expo-av";
 import { createPostLike, removePostLike } from "../services/postService";
 
@@ -42,34 +49,44 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
     setLikes(item?.postLikes);
   }, []);
 
+  const onShare = async () => {
+    let content = { message: stripHtmlTags(item?.body) };
+    if (item?.file) {
+      // download file then share
+      let url = await downloadFile(getSupabaseFileUrl(item?.file).uri);
+      content.uri = url;
+    }
+    Share.share(content);
+  };
+
   const createdAt = moment(item?.created_at).format("MMM D");
   const openPostsDetails = () => {
     // later
   };
   const onLike = async () => {
     if (liked) {
-      let updatedLikes = likes.filter((like) => like.userid != currentUser?.id);
+      let updatedLikes = likes.filter((like) => like.userId != currentUser?.id);
 
       setLikes([...updatedLikes]);
       let res = await removePostLike(item?.id, currentUser?.id);
       console.log("post Like removed:", res);
       if (!res.success) {
-        Alert.alert("Like Error", "Could Not unlike the post");
+        Alert.alert("Like", "Could not unlike the post");
       }
     } else {
       let data = {
-        userid: currentUser?.id,
-        postid: item?.id,
+        userId: currentUser?.id,
+        postId: item?.id,
       };
       setLikes([...likes, data]);
       let res = await createPostLike(data);
       console.log("post Liked:", res);
       if (!res.success) {
-        Alert.alert("Like Error", "Could Not lke the post");
+        Alert.alert("Like ", "Could not like the post");
       }
     }
   };
-  const liked = likes.filter((like) => like.userid == currentUser?.id)[0]
+  const liked = likes.filter((like) => like.userId == currentUser?.id)[0]
     ? true
     : false;
   return (
@@ -95,7 +112,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
           />
         </TouchableOpacity>
       </View>
-      {/* post body and media */}
+
       <View style={styles.content}>
         <View style={styles.postBody}>
           {item?.body && (
@@ -145,7 +162,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
         </View>
         <View style={styles.footerButton}>
           <TouchableOpacity>
-            <Icon name="share" size={24} />
+            <Icon name="share" size={24} onPress={onShare} />
           </TouchableOpacity>
         </View>
       </View>

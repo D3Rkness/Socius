@@ -26,10 +26,10 @@ const Home = () => {
   const handlePostEvent = async (payload) => {
     if (payload.eventType === "INSERT" && payload?.new?.id) {
       let newPost = { ...payload.new };
-      console.log("User ID in new post: ", newPost.userid); // Corrected key name
+      console.log("User ID in new post: ", newPost.userId); // Corrected key name
 
-      if (newPost.userid) {
-        let res = await getUserData(newPost.userid);
+      if (newPost.userId) {
+        let res = await getUserData(newPost.userId);
         console.log("User data response: ", res);
 
         newPost.user = res.success ? res.data : {};
