@@ -3,6 +3,7 @@ import React from "react";
 import { theme } from "../constants/theme";
 import { Image } from "expo-image";
 import { hp } from "../helpers/common";
+import { getUserImageSrc } from "../services/imageService";
 
 const Avatar = ({
   uri,
@@ -12,7 +13,7 @@ const Avatar = ({
 }) => {
   return (
     <Image
-      source={{ uri }}
+      source={getUserImageSrc(uri)}
       transition={100}
       style={[
         styles.avatar,
