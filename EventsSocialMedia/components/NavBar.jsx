@@ -4,7 +4,7 @@ import Icon from "../assets/icons";
 import { useRouter } from "expo-router";
 
 const NavBar = () => {
-  const size = 25;
+  const size = 22;
   const router = useRouter();
 
   return (
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   navItem: {
-    height: 40,
+    height: 50,
   },
 });
 

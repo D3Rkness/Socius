@@ -24,6 +24,8 @@ import Image from "./Image";
 import Video from "./Video";
 import Events from "./Events";
 import Chat from "./Chat";
+import Bell from "./Bell";
+import X from "./X";
 
 const icons = {
   home: Home,
@@ -49,6 +51,8 @@ const icons = {
   video: Video,
   events: Events,
   chat: Chat,
+  bell: Bell,
+  x: X,
 };
 
 const Icon = ({ name, ...props }) => {

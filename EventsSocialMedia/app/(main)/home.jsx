@@ -28,7 +28,7 @@ const Home = () => {
   const handlePostEvent = async (payload) => {
     if (payload.eventType === "INSERT" && payload?.new?.id) {
       let newPost = { ...payload.new };
-      console.log("User ID in new post: ", newPost.userId); // Corrected key name
+      console.log("User ID in new post: ", newPost.userId);
 
       if (newPost.userId) {
         let res = await getUserData(newPost.userId);
@@ -61,8 +61,6 @@ const Home = () => {
     limit = limit + 4;
     console.log("fetching posts : ", limit);
     let res = await fetchPosts(limit);
-    // console.log("posts : ", res);
-    // console.log("user : ",res.data[0].user)
     if (res.data) {
       if (posts.length == res.data.length) setHasMore(false);
       setPosts(res.data);
@@ -76,15 +74,7 @@ const Home = () => {
           <View style={styles.icons}>
             <Pressable onPress={() => router.push("notifications")}>
               <Icon
-                name="heart"
-                size={hp(3.2)}
-                strokeWidth={2}
-                color={theme.colors.text}
-              />
-            </Pressable>
-            <Pressable onPress={() => router.push("newPost")}>
-              <Icon
-                name="plus"
+                name="bell"
                 size={hp(3.2)}
                 strokeWidth={2}
                 color={theme.colors.text}
@@ -126,8 +116,10 @@ const Home = () => {
             )
           }
         />
+        <Pressable style={styles.fab} onPress={() => router.push("newPost")}>
+          <Icon name="plus" size={hp(3.2)} color="white" />
+        </Pressable>
       </View>
-      {/* <Button title="Logout" onPress={onLogout} /> */}
     </ScreenWrapper>
   );
 };
@@ -175,5 +167,22 @@ const styles = StyleSheet.create({
     fontSize: hp(2),
     textAlign: "center",
     color: theme.colors.text,
+  },
+
+  fab: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: theme.colors.primary,
+    borderRadius: 50,
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
 });
