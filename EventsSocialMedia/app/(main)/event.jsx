@@ -22,6 +22,7 @@ const Event = ({ route }) => {
 
   // Destructure the parameters passed via the router
   const { name, date, venue, image } = params;
+  const dropdownOptions = ["Choice 1", "Choice 2", "Choice 3"];
 
   // Mock data for users attending or interested
   const goingUsers = [
@@ -85,6 +86,8 @@ const Event = ({ route }) => {
       {/* Event Info */}
       <View style={styles.eventInfo}>
         <Text style={styles.eventTitle}>{name}</Text>
+        <Text style={styles.eventDate}>{date}</Text>
+
         <View
           style={{
             flexDirection: "row",
@@ -92,9 +95,9 @@ const Event = ({ route }) => {
             width: "100%",
           }}
         >
-          <Text style={styles.eventDate}>{date}</Text>
+          <Text style={styles.eventVenue}>{venue}</Text>
+          <Text style={styles.placeHolder}>Interested</Text>
         </View>
-        <Text style={styles.eventVenue}>{venue}</Text>
 
         <View style={styles.containerMusicTickets}>
           {/* Buttons for Ticket Links */}
@@ -171,6 +174,15 @@ const Event = ({ route }) => {
 export default Event;
 
 const styles = StyleSheet.create({
+  placeHolder: {
+    color: theme.colors.textDark,
+    fontSize: hp(2.6),
+    fontWeight: "bold",
+    borderWidth: 1.5,
+    padding: 5,
+    borderRadius: 15,
+  },
+
   container: {
     flex: 1,
     padding: wp(5),
@@ -269,5 +281,32 @@ const styles = StyleSheet.create({
   attendeeList2: {
     marginLeft: wp(2),
     paddingLeft: wp(3),
+  },
+
+  label: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  dropdownButton: {
+    width: 200,
+    height: 50,
+    backgroundColor: "#ddd",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#ccc",
+  },
+  dropdownButtonText: {
+    fontSize: 16,
+    color: "#333",
+  },
+  dropdownStyle: {
+    backgroundColor: "#fff",
+  },
+  dropdownRow: {
+    height: 40,
+    justifyContent: "center",
+  },
+  dropdownRowText: {
+    fontSize: 16,
   },
 });
