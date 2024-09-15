@@ -1,25 +1,93 @@
 import {
   Alert,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import ScreenWrapper from "../../components/ScreenWrapper";
 import { useAuth } from "../../contexts/AuthContext";
-import { useRouter } from "expo-router";
 import Header from "../../components/Header";
 import { hp, wp } from "../../helpers/common";
 import Icon from "../../assets/icons";
 import { theme } from "../../constants/theme";
-import { supabase } from "../../lib/supabase";
 import Avatar from "../../components/Avatar";
+import { router } from "expo-router";
+import { FlatList } from "react-native";
+import Loading from "../../components/Loading";
+import { fetchPosts } from "../../services/postService";
+import { supabase } from "../../lib/supabase";
+import PostCard from "../../components/PostCard";
+// Define the different components you want to render
 
 const Profile = () => {
   const { user, setAuth } = useAuth();
-  const router = useRouter();
+  const [selectedSection, setSelectedSection] = useState("about");
+  const [posts, setPosts] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+
+  const getPosts = async () => {
+    if (!hasMore) return null;
+    let res = await fetchPosts(10, user.id);
+    if (res.success) {
+      if (posts.length == res.data.length) setHasMore(false);
+      setPosts(res.data);
+    }
+  };
+  const About = () => (
+    <ScrollView style={styles.about}>
+      <View style={styles.description}>
+        <Text style={styles.descriptionHeader}>Description:</Text>
+        <Text style={styles.descriptionText}>
+          {user && user.bio && <Text style={styles.infoText}>{user.bio}</Text>}
+        </Text>
+      </View>
+      <View style={styles.description}>
+        <View style={styles.row}>
+          <Text style={styles.infoText}>Age: 25</Text>
+          <Text style={styles.infoText}>Gender: Female</Text>
+        </View>
+        <Text style={styles.infoText}>School: XYZ University</Text>
+        <Text style={styles.infoText}>Favorite Music Genre: Indie Rock</Text>
+        <Text style={styles.infoText}>Sports: Basketball</Text>
+      </View>
+    </ScrollView>
+  );
+  const Events = () => <Text style={styles.sectionText}>Events Content</Text>;
+  const Posts = () => (
+    <ScreenWrapper bg="white">
+      <FlatList
+        data={posts}
+        ListHeaderComponentStyle={{ marginBottom: 30 }}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listStyle}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <PostCard item={item} currentUser={user} router={router} />
+        )}
+        onEndReached={() => {
+          getPosts();
+          console.log("got to the end");
+        }}
+        onEndReachedThreshold={0}
+        ListFooterComponent={
+          hasMore ? (
+            <View style={{ marginVertical: posts.length == 0 ? 100 : 30 }}>
+              <Loading />
+            </View>
+          ) : (
+            <View style={{ marginVertical: 30 }}>
+              <Text style={styles.noPosts}>No more posts</Text>
+            </View>
+          )
+        }
+      />
+    </ScreenWrapper>
+  );
+
   const onLogout = async () => {
     // setAuth(null);
     const { error } = await supabase.auth.signOut();
@@ -27,6 +95,7 @@ const Profile = () => {
       Alert.alert("Sign out", "Error signing out");
     }
   };
+
   const handleLayout = async () => {
     Alert.alert("Confirm", "Are you sure you want to log out?", [
       {
@@ -44,12 +113,49 @@ const Profile = () => {
 
   return (
     <ScreenWrapper bg="white">
-      <UserHeader user={user} router={router} handleLayout={handleLayout} />
+      <UserHeader user={user} handleLayout={handleLayout} />
+      <View style={styles.tabContainer}>
+        <TouchableOpacity onPress={() => setSelectedSection("about")}>
+          <Text
+            style={[
+              styles.tabText,
+              selectedSection === "about" && styles.activeTab,
+            ]}
+          >
+            About
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setSelectedSection("events")}>
+          <Text
+            style={[
+              styles.tabText,
+              selectedSection === "events" && styles.activeTab,
+            ]}
+          >
+            Events
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setSelectedSection("posts")}>
+          <Text
+            style={[
+              styles.tabText,
+              selectedSection === "posts" && styles.activeTab,
+            ]}
+          >
+            Posts
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.contentContainer}>
+        {selectedSection === "about" && <About />}
+        {selectedSection === "events" && <Events />}
+        {selectedSection === "posts" && <Posts />}
+      </View>
     </ScreenWrapper>
   );
 };
 
-const UserHeader = ({ user, router, handleLayout }) => {
+const UserHeader = ({ user, handleLayout }) => {
   return (
     <View
       style={{ flex: 1, backgroundColor: "white", paddingHorizontal: wp(4) }}
@@ -61,7 +167,6 @@ const UserHeader = ({ user, router, handleLayout }) => {
           <Icon name="logout" color={theme.colors.rose} />
         </TouchableOpacity>
       </View>
-
       <View style={styles.container}>
         <View style={{ gap: 15 }}>
           <View style={styles.avatarContainer}>
@@ -77,27 +182,9 @@ const UserHeader = ({ user, router, handleLayout }) => {
               <Icon name="edit" strokeWidth={2.5} size={20} />
             </Pressable>
           </View>
-
           <View style={{ alignItems: "center", gap: 4 }}>
+            <Text style={styles.actualName}>Hongyu Zhao</Text>
             <Text style={styles.userName}>{user && user.name}</Text>
-            <Text style={styles.infoText}>{user && user.address}</Text>
-          </View>
-
-          <View style={{ gap: 10 }}>
-            <View style={styles.info}>
-              <Icon name="mail" size={20} color={theme.colors.textLight} />
-              <Text style={styles.infoText}>{user && user.email}</Text>
-            </View>
-            {user && user.phoneNumber && (
-              <View style={styles.info}>
-                <Icon name="call" size={20} color={theme.colors.textLight} />
-                <Text style={styles.infoText}>{user && user.phoneNumber}</Text>
-              </View>
-            )}
-
-            {user && user.bio && (
-              <Text style={styles.infoText}>{user.bio}</Text>
-            )}
           </View>
         </View>
       </View>
@@ -105,19 +192,9 @@ const UserHeader = ({ user, router, handleLayout }) => {
   );
 };
 
-export default Profile;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  headerContainer: {
-    marginHorizontal: wp(4),
-    marginBottom: 20,
-  },
-  headerShape: {
-    width: wp(100),
-    height: hp(20),
   },
   avatarContainer: {
     height: hp(12),
@@ -137,7 +214,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 7,
   },
-  userName: {
+  actualName: {
     fontSize: hp(3),
     fontWeight: "500",
     gap: 10,
@@ -150,7 +227,10 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: hp(1.6),
     fontWeight: "500",
-    color: theme.colors.textLight,
+    color: theme.colors.textDark,
+    borderBottomWidth: 1,
+    marginVertical: 5,
+    borderColor: theme.colors.textLight,
   },
   logoutButton: {
     position: "absolute",
@@ -159,13 +239,51 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.sm,
     backgroundColor: "#fee2e2",
   },
-  listStyle: {
-    paddingHorizontal: wp(4),
-    paddingBottom: 30,
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
   },
-  noPosts: {
+  tabText: {
+    fontSize: hp(2.2),
+    fontWeight: "500",
+  },
+  activeTab: {
+    textDecorationLine: "underline",
+    color: theme.colors.textDark,
+  },
+  contentContainer: {
+    flex: 1,
+    paddingHorizontal: wp(4),
+    paddingVertical: hp(2),
+  },
+  sectionText: {
     fontSize: hp(2),
     textAlign: "center",
-    color: theme.colors.text,
+  },
+
+  descriptionHeader: {
+    fontSize: hp(2.2),
+    marginBottom: 10,
+  },
+
+  description: {
+    width: "80%",
+    alignSelf: "center",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 10,
+    minHeight: 100,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginVertical: 5,
   },
 });
+
+export default Profile;
