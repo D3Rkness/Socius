@@ -15,6 +15,8 @@ import PostCard from "../../components/PostCard";
 import Loading from "../../components/Loading";
 import { supabase } from "../../lib/supabase";
 import { getUserData } from "../../services/userService";
+import NavBar from "../../components/NavBar";
+
 var limit = 0;
 
 const Home = () => {
@@ -124,6 +126,8 @@ const Home = () => {
             )
           }
         />
+
+        <NavBar />
       </View>
       {/* <Button title="Logout" onPress={onLogout} /> */}
     </ScreenWrapper>
