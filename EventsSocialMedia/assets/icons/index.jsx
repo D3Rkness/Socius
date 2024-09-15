@@ -26,6 +26,7 @@ import Events from "./Events";
 import Chat from "./Chat";
 import Bell from "./Bell";
 import X from "./X";
+import Settings from "./Settings";
 
 const icons = {
   home: Home,
@@ -53,6 +54,7 @@ const icons = {
   chat: Chat,
   bell: Bell,
   x: X,
+  settings: Settings,
 };
 
 const Icon = ({ name, ...props }) => {

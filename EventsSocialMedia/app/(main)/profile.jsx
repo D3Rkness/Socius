@@ -47,10 +47,10 @@ const Profile = () => {
       </View>
       <View style={styles.description}>
         <View style={styles.row}>
-          <Text style={styles.infoText}>Age: 25</Text>
-          <Text style={styles.infoText}>Gender: Female</Text>
+          <Text style={styles.infoText}>Age: 21</Text>
+          <Text style={styles.infoText}>Gender: Male</Text>
         </View>
-        <Text style={styles.infoText}>School: XYZ University</Text>
+        <Text style={styles.infoText}>School: Johns Hopkins University</Text>
         <Text style={styles.infoText}>Favorite Music Genre: Indie Rock</Text>
         <Text style={styles.infoText}>Sports: Basketball</Text>
       </View>
@@ -58,34 +58,32 @@ const Profile = () => {
   );
   const Events = () => <Text style={styles.sectionText}>Events Content</Text>;
   const Posts = () => (
-    <ScreenWrapper bg="white">
-      <FlatList
-        data={posts}
-        ListHeaderComponentStyle={{ marginBottom: 30 }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listStyle}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <PostCard item={item} currentUser={user} router={router} />
-        )}
-        onEndReached={() => {
-          getPosts();
-          console.log("got to the end");
-        }}
-        onEndReachedThreshold={0}
-        ListFooterComponent={
-          hasMore ? (
-            <View style={{ marginVertical: posts.length == 0 ? 100 : 30 }}>
-              <Loading />
-            </View>
-          ) : (
-            <View style={{ marginVertical: 30 }}>
-              <Text style={styles.noPosts}>No more posts</Text>
-            </View>
-          )
-        }
-      />
-    </ScreenWrapper>
+    <FlatList
+      data={posts}
+      ListHeaderComponentStyle={{ marginBottom: 30 }}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.listStyle}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item }) => (
+        <PostCard item={item} currentUser={user} router={router} />
+      )}
+      onEndReached={() => {
+        getPosts();
+        console.log("got to the end");
+      }}
+      onEndReachedThreshold={0}
+      ListFooterComponent={
+        hasMore ? (
+          <View style={{ marginVertical: posts.length == 0 ? 100 : 30 }}>
+            <Loading />
+          </View>
+        ) : (
+          <View style={{ marginVertical: 30 }}>
+            <Text style={styles.noPosts}>No more posts</Text>
+          </View>
+        )
+      }
+    />
   );
 
   const onLogout = async () => {
@@ -158,22 +156,27 @@ const Profile = () => {
 const UserHeader = ({ user, handleLayout }) => {
   return (
     <View
-      style={{ flex: 1, backgroundColor: "white", paddingHorizontal: wp(4) }}
+      style={{
+        backgroundColor: "white",
+        paddingHorizontal: wp(5),
+        paddingBottom: wp(1),
+      }}
     >
       {/* Header */}
-      <View>
-        <Header title="Profile" mb={30} showBackButton={true} />
+      <View style={styles.row}>
+        <Header title="Profile" mb={30} showBackButton={false} />
         <TouchableOpacity style={styles.logoutButton} onPress={handleLayout}>
-          <Icon name="logout" color={theme.colors.rose} />
+          <Icon name="settings" size={30} />
         </TouchableOpacity>
       </View>
-      <View style={styles.container}>
+      <View style={styles.row}>
         <View style={{ gap: 15 }}>
           <View style={styles.avatarContainer}>
             <Avatar
               uri={user?.image}
-              size={hp(12)}
+              size={hp(10)}
               rounded={theme.radius.xxl * 1.4}
+              style={{ alignSelf: "left" }}
             />
             <Pressable
               style={styles.editIcon}
@@ -182,9 +185,23 @@ const UserHeader = ({ user, handleLayout }) => {
               <Icon name="edit" strokeWidth={2.5} size={20} />
             </Pressable>
           </View>
-          <View style={{ alignItems: "center", gap: 4 }}>
+          <View>
             <Text style={styles.actualName}>Hongyu Zhao</Text>
             <Text style={styles.userName}>{user && user.name}</Text>
+          </View>
+        </View>
+        <View style={styles.statsContainer}>
+          <View style={{ alignItems: "center" }}>
+            <Text style={styles.statsText}>33</Text>
+            <Text style={styles.statsText}>Followers</Text>
+          </View>
+          <View style={{ alignItems: "center" }}>
+            <Text style={styles.statsText}>24</Text>
+            <Text style={styles.statsText}>Following</Text>
+          </View>
+          <View style={styles.shareButtons}>
+            <Icon name="chat" size={23} />
+            <Icon name="share" size={23} />
           </View>
         </View>
       </View>
@@ -193,13 +210,9 @@ const UserHeader = ({ user, handleLayout }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   avatarContainer: {
-    height: hp(12),
-    width: hp(12),
-    alignSelf: "center",
+    height: hp(10),
+    width: hp(10),
   },
   editIcon: {
     position: "absolute",
@@ -216,7 +229,7 @@ const styles = StyleSheet.create({
   },
   actualName: {
     fontSize: hp(3),
-    fontWeight: "500",
+    fontWeight: "700",
     gap: 10,
   },
   info: {
@@ -237,14 +250,14 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 5,
     borderRadius: theme.radius.sm,
-    backgroundColor: "#fee2e2",
+    marginRight: 10,
   },
   tabContainer: {
+    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-around",
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    width: "100%",
+    alignSelf: "center",
   },
   tabText: {
     fontSize: hp(2.2),
@@ -283,6 +296,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: 5,
+  },
+  statsContainer: {
+    alignItems: "flex-end",
+    marginLeft: wp(4),
+  },
+  statsText: {
+    fontSize: hp(2),
+    fontWeight: "500",
+  },
+  shareButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: 70,
+    alignSelf: "center",
+    marginTop: 20,
   },
 });
 
