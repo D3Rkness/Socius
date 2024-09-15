@@ -12,6 +12,7 @@ import { fetchTicketmasterEvents } from "../../lib/ticketmaster";
 import ScreenWrapper from "../../components/ScreenWrapper";
 import Icon from "../../assets/icons";
 import { theme } from "../../constants/theme";
+import { hp, wp } from "../../helpers/common";
 
 const TicketmasterEvents = () => {
   const [searchQuery, setSearchQuery] = useState("concert");
@@ -21,7 +22,13 @@ const TicketmasterEvents = () => {
 
   const getEvents = async () => {
     setLoading(true);
-    const response = await fetchTicketmasterEvents(searchQuery);
+    const query = searchQuery.trim() || "";
+
+    const response = await fetchTicketmasterEvents(
+      query,
+      "Baltimore",
+      "relevance,desc"
+    );
     if (response?._embedded?.events) {
       setEvents(response._embedded.events);
     }
@@ -96,27 +103,27 @@ const TicketmasterEvents = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: wp(6),
   },
   title: {
-    fontSize: 32,
+    fontSize: hp(3.2), // 32px equivalent based on screen height
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: hp(2.5), // 20px equivalent
   },
   searchContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: hp(2),
   },
   searchBar: {
     flexDirection: "row",
     borderWidth: 1,
     borderColor: "#e3e3e3",
-    borderRadius: 25,
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    flex: 0.85,
+    borderRadius: wp(6),
+    paddingHorizontal: wp(4),
+    paddingVertical: hp(1),
+    flex: 0.95,
     alignItems: "center",
   },
   input: {
@@ -124,48 +131,50 @@ const styles = StyleSheet.create({
   },
   searchButton: {
     backgroundColor: theme.colors.primaryDark,
-    padding: 10,
-    borderRadius: 50,
-    marginLeft: 10,
+    padding: wp(2.5),
+    borderRadius: wp(12.5),
+    marginLeft: wp(2.5),
   },
   locationContainer: {
-    marginTop: -10,
+    marginTop: hp(-1.25),
     alignItems: "flex-end",
   },
   locationText: {
-    fontSize: 14,
+    fontSize: hp(1.75),
     color: "#555",
   },
   eventCard: {
-    marginBottom: 10,
+    marginBottom: hp(1.25),
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    paddingBottom: 10,
+    paddingBottom: hp(1.25),
   },
   eventImage: {
     width: "100%",
-    height: 200,
-    borderRadius: 10,
+    height: hp(25),
+    borderRadius: wp(2.5),
   },
   eventDetails: {
-    marginTop: 10,
+    marginTop: hp(1.25),
   },
   eventName: {
-    fontSize: 18,
+    fontSize: hp(2.25),
     fontWeight: "bold",
   },
   eventDate: {
     color: "#888",
+    fontSize: hp(1.75),
   },
   eventVenue: {
     color: "#aaa",
+    fontSize: hp(1.75),
   },
   attendees: {
     flexDirection: "row",
-    marginTop: 10,
+    marginTop: hp(1.25),
   },
   attendeeIcon: {
-    marginLeft: -10,
+    marginLeft: wp(-2.5),
   },
 });
 
