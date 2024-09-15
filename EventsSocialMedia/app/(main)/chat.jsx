@@ -95,7 +95,7 @@ const Chat = () => {
           } // Display if no users are found
         />
       </View>
-      <Pressable style={styles.fab} onPress={() => router.push("newPost")}>
+      <Pressable style={styles.fab} onPress={() => {}}>
         <Icon name="pencil" size={hp(3.2)} color="white" />
       </Pressable>
     </ScreenWrapper>

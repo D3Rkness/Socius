@@ -92,18 +92,36 @@ const Events = () => {
 
                 <View style={styles.eventDetails}>
                   <Text style={styles.eventName}>{item.name}</Text>
-                  <Text style={styles.eventDate}>
-                    {item.dates?.start?.localDate}
-                  </Text>
-                  <Text style={styles.eventVenue}>
-                    {item._embedded?.venues[0]?.name} ·{" "}
-                    {item._embedded?.venues[0]?.city?.name}
-                  </Text>
+                  <View style={styles.minorDetailsContainer}>
+                    <Text style={styles.eventDate}>
+                      {item.dates?.start?.localDate}
+                    </Text>
+                    <Text style={styles.eventVenue}>
+                      {item._embedded?.venues[0]?.name} ·{" "}
+                      {item._embedded?.venues[0]?.city?.name}
+                    </Text>
 
-                  <View style={styles.attendees}>
-                    <Icon name="user" size={24} />
-                    <Icon name="user" size={24} style={styles.attendeeIcon} />
-                    <Icon name="user" size={24} style={styles.attendeeIcon} />
+                    {/* Attendees Profile Pictures */}
+                    <View style={styles.attendeesContainer}>
+                      <Image
+                        source={{
+                          uri: "https://i.ytimg.com/vi/r2cRl01DK-Y/maxresdefault.jpg",
+                        }}
+                        style={styles.attendeeAvatar}
+                      />
+                      <Image
+                        source={{
+                          uri: "https://cdn.britannica.com/44/197644-050-EA683D2D/Justin-Timberlake-American-Rio-de-Janeiro-Brazil-2013.jpg",
+                        }}
+                        style={[styles.attendeeAvatar, styles.avatarOverlap]}
+                      />
+                      <Image
+                        source={{
+                          uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNwuBFrUOvIXh0_TDAt43kSS0VtIzoGaVQ7g&s",
+                        }}
+                        style={[styles.attendeeAvatar, styles.avatarOverlap]}
+                      />
+                    </View>
                   </View>
                 </View>
               </View>
@@ -152,6 +170,7 @@ const styles = StyleSheet.create({
   },
   locationContainer: {
     marginTop: hp(-1.25),
+    marginBottom: hp(1),
     alignItems: "flex-end",
   },
   locationText: {
@@ -162,7 +181,8 @@ const styles = StyleSheet.create({
     marginBottom: hp(1.25),
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    paddingBottom: hp(1.25),
+    paddingBottom: hp(1.5),
+    position: "relative", // Important for absolute positioning of attendees
   },
   eventImage: {
     width: "100%",
@@ -184,12 +204,24 @@ const styles = StyleSheet.create({
     color: "#aaa",
     fontSize: hp(1.75),
   },
-  attendees: {
-    flexDirection: "row",
-    marginTop: hp(1.25),
+  minorDetailsContainer: {
+    paddingTop: hp(2),
   },
-  attendeeIcon: {
-    marginLeft: wp(-2.5),
+  attendeesContainer: {
+    flexDirection: "row",
+    position: "absolute", // Position absolutely within the event card
+    bottom: 0, // Aligns the container to the bottom
+    right: 0, // Aligns the container to the right
+  },
+  attendeeAvatar: {
+    width: wp(10),
+    height: wp(10),
+    borderRadius: wp(5),
+    borderWidth: 2,
+    borderColor: "#fff",
+  },
+  avatarOverlap: {
+    marginLeft: wp(-3.5),
   },
 });
 
