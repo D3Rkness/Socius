@@ -28,6 +28,7 @@ import Bell from "./Bell";
 import X from "./X";
 import Settings from "./Settings";
 import Pencil from "./Pencil";
+import ArrowDown from "./ArrowDown";
 
 const icons = {
   home: Home,
@@ -57,6 +58,7 @@ const icons = {
   x: X,
   settings: Settings,
   pencil: Pencil,
+  arrowDown: ArrowDown,
 };
 
 const Icon = ({ name, ...props }) => {
