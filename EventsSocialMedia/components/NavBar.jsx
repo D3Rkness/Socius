@@ -1,6 +1,7 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "../assets/icons";
+import { router } from "expo-router";
 
 const NavBar = () => {
   const size = 25;
@@ -19,7 +20,10 @@ const NavBar = () => {
       <TouchableOpacity style={styles.navItem}>
         <Icon name="chat" size={size} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navItem}>
+      <TouchableOpacity
+        style={styles.navItem}
+        onPress={() => router.push("profile")}
+      >
         <Icon name="user" size={size} />
       </TouchableOpacity>
     </View>
