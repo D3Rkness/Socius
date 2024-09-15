@@ -21,7 +21,6 @@ import Loading from "../../components/Loading";
 import { fetchPosts } from "../../services/postService";
 import { supabase } from "../../lib/supabase";
 import PostCard from "../../components/PostCard";
-// Define the different components you want to render
 
 const Profile = () => {
   const { user, setAuth } = useAuth();

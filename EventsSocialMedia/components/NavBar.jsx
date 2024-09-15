@@ -49,7 +49,7 @@ const NavBar = () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.navItem}
-        onPress={() => navigate("search")}
+        onPress={() => navigate("userSearch")}
       >
         <Icon name="search" size={size} color={iconColors.search} />
       </TouchableOpacity>

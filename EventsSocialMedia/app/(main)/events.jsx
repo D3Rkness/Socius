@@ -14,8 +14,8 @@ import Icon from "../../assets/icons";
 import { theme } from "../../constants/theme";
 import { hp, wp } from "../../helpers/common";
 
-const TicketmasterEvents = () => {
-  const [searchQuery, setSearchQuery] = useState("concert");
+const Events = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState("Baltimore, MD");
@@ -106,9 +106,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(6),
   },
   title: {
-    fontSize: hp(3.2), // 32px equivalent based on screen height
+    fontSize: hp(3.2),
     fontWeight: "bold",
-    marginBottom: hp(2.5), // 20px equivalent
+    marginBottom: hp(2.5),
   },
   searchContainer: {
     flexDirection: "row",
@@ -178,4 +178,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TicketmasterEvents;
+export default Events;

@@ -17,7 +17,6 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
   const onSubmit = async () => {
     if (!email || !password || !name) {
       Alert.alert("Sign Up", "Please fill all the fields!");
