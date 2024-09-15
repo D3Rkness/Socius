@@ -21,8 +21,8 @@ const Welcome = () => {
 
         {/* title */}
         <View style={{ gap: 20 }}>
-          <Text style={styles.title}>EventsApp</Text>
-          <Text style={styles.punchLine}>find friends to go to events!</Text>
+          <Text style={styles.title}>Socius</Text>
+          <Text style={styles.punchLine}>Find friends to go to events!</Text>
         </View>
 
         {/* footer */}
