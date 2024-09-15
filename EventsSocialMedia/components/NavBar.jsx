@@ -1,10 +1,11 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "../assets/icons";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 
 const NavBar = () => {
   const size = 25;
+  const router = useRouter();
 
   return (
     <View style={styles.navbar}>
@@ -17,7 +18,10 @@ const NavBar = () => {
       <TouchableOpacity style={styles.navItem}>
         <Icon name="search" size={size} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navItem}>
+      <TouchableOpacity
+        style={styles.navItem}
+        onPress={() => router.push("events")}
+      >
         <Icon name="events" size={size + 1} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
