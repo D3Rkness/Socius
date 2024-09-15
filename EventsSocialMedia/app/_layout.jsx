@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { getUserData } from "../services/userService";
 import NavBar from "../components/NavBar";
+import { useState } from "react";
 
 LogBox.ignoreLogs([
   "Warning: TRenderEngineProvider",
@@ -15,7 +16,6 @@ const _layout = () => {
   return (
     <AuthProvider>
       <MainLayout />
-      <NavBar />
     </AuthProvider>
   );
 };
@@ -29,6 +29,8 @@ const MainLayout = () => {
       setUserData({ ...res.data, email });
     }
   };
+  const [loggedIn, setLoggedIn] = useState(false);
+
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
       console.log("session user : ", session?.user?.id);
@@ -37,6 +39,7 @@ const MainLayout = () => {
         setAuth(session?.user);
         updateUserData(session?.user, session?.user?.email);
         router.replace("/home");
+        setLoggedIn(true);
       } else {
         setAuth(null);
         router.replace("/welcome");
@@ -44,7 +47,12 @@ const MainLayout = () => {
     });
   }, []);
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <>
+      <Stack screenOptions={{ headerShown: false }} />
+      {loggedIn && <NavBar />}
+    </>
+  );
 };
 
 export default _layout;
