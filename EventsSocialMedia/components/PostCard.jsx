@@ -69,7 +69,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
 
       setLikes([...updatedLikes]);
       let res = await removePostLike(item?.id, currentUser?.id);
-      console.log("post Like removed:", res);
+      // console.log("post Like removed:", res);
       if (!res.success) {
         Alert.alert("Like", "Could not unlike the post");
       }
@@ -80,7 +80,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
       };
       setLikes([...likes, data]);
       let res = await createPostLike(data);
-      console.log("post Liked:", res);
+      // console.log("post Liked:", res);
       if (!res.success) {
         Alert.alert("Like ", "Could not like the post");
       }

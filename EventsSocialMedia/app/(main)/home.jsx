@@ -28,11 +28,11 @@ const Home = () => {
   const handlePostEvent = async (payload) => {
     if (payload.eventType === "INSERT" && payload?.new?.id) {
       let newPost = { ...payload.new };
-      console.log("User ID in new post: ", newPost.userId);
+      // console.log("User ID in new post: ", newPost.userId);
 
       if (newPost.userId) {
         let res = await getUserData(newPost.userId);
-        console.log("User data response: ", res);
+        // console.log("User data response: ", res);
 
         newPost.user = res.success ? res.data : {};
         setPosts((prevPosts) => [newPost, ...prevPosts]);
@@ -59,7 +59,7 @@ const Home = () => {
   const getPost = async () => {
     if (!hasMore) return null;
     limit = limit + 4;
-    console.log("fetching posts : ", limit);
+    // console.log("fetching posts : ", limit);
     let res = await fetchPosts(limit);
     if (res.data) {
       if (posts.length == res.data.length) setHasMore(false);
@@ -101,7 +101,7 @@ const Home = () => {
           )}
           onEndReached={() => {
             getPost();
-            console.log("Reached End");
+            // console.log("Reached End");
           }}
           onEndReachedThreshold={0}
           ListFooterComponent={

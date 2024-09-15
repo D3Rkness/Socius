@@ -33,7 +33,7 @@ const MainLayout = () => {
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("session user : ", session?.user?.id);
+      // console.log("session user : ", session?.user?.id);
 
       if (session) {
         setAuth(session?.user);

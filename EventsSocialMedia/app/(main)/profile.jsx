@@ -68,7 +68,7 @@ const Profile = () => {
       )}
       onEndReached={() => {
         getPosts();
-        console.log("got to the end");
+        // console.log("got to the end");
       }}
       onEndReachedThreshold={0}
       ListFooterComponent={

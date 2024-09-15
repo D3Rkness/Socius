@@ -96,7 +96,7 @@ const NewPost = () => {
     setLoading(true);
     let res = await createOrUpdatePost(data);
     setLoading(false);
-    console.log("res Post : ", res);
+    // console.log("res Post : ", res);
 
     if (res.success) {
       setFile(null);
