@@ -126,8 +126,6 @@ const Home = () => {
             )
           }
         />
-
-        <NavBar />
       </View>
       {/* <Button title="Logout" onPress={onLogout} /> */}
     </ScreenWrapper>

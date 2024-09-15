@@ -4,6 +4,7 @@ import { Stack, useRouter } from "expo-router";
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { getUserData } from "../services/userService";
+import NavBar from "../components/NavBar";
 
 LogBox.ignoreLogs([
   "Warning: TRenderEngineProvider",
@@ -14,6 +15,7 @@ const _layout = () => {
   return (
     <AuthProvider>
       <MainLayout />
+      <NavBar />
     </AuthProvider>
   );
 };

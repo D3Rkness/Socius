@@ -2,13 +2,24 @@ import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "../assets/icons";
 import { router } from "expo-router";
+import { useNavigationState } from "@react-navigation/native";
 
 const NavBar = () => {
   const size = 25;
+  const currentRoute = useNavigationState(
+    (state) => state.routes[state.index]?.name
+  );
+
+  console.log("Current Route: ", currentRoute);
+
+  const onNavigate = (route) => {
+    if (currentRoute === route) return;
+    router.push(route);
+  };
 
   return (
     <View style={styles.navbar}>
-      <TouchableOpacity style={styles.navItem}>
+      <TouchableOpacity style={styles.navItem} onPress={onNavigate("home")}>
         <Icon name="home" size={size + 1} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
@@ -20,10 +31,7 @@ const NavBar = () => {
       <TouchableOpacity style={styles.navItem}>
         <Icon name="chat" size={size} />
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.navItem}
-        onPress={() => router.push("profile")}
-      >
+      <TouchableOpacity style={styles.navItem} onPress={onNavigate("profile")}>
         <Icon name="user" size={size} />
       </TouchableOpacity>
     </View>
