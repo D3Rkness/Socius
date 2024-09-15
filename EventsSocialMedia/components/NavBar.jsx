@@ -3,18 +3,18 @@ import { View, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "../assets/icons";
 
 const NavBar = () => {
-  const size = 28;
+  const size = 25;
 
   return (
     <View style={styles.navbar}>
       <TouchableOpacity style={styles.navItem}>
-        <Icon name="home" size={size} />
+        <Icon name="home" size={size + 1} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
         <Icon name="search" size={size} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
-        <Icon name="events" size={size} />
+        <Icon name="events" size={size + 1} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
         <Icon name="chat" size={size} />
@@ -30,14 +30,13 @@ const styles = StyleSheet.create({
   navbar: {
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: "white",
+    backgroundColor: "#f5f5f5",
     borderTopWidth: 1,
     borderTopColor: "#999",
     paddingVertical: 10,
   },
   navItem: {
-    height: 55,
-    justifyContent: "center",
+    height: 40,
   },
 });
 
