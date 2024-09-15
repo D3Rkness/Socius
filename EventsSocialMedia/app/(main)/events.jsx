@@ -13,6 +13,7 @@ import ScreenWrapper from "../../components/ScreenWrapper";
 import Icon from "../../assets/icons";
 import { theme } from "../../constants/theme";
 import { hp, wp } from "../../helpers/common";
+import { router } from "expo-router";
 
 const Events = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,6 +34,18 @@ const Events = () => {
       setEvents(response._embedded.events);
     }
     setLoading(false);
+  };
+
+  const handleEventPress = (e) => {
+    router.push({
+      pathname: "event",
+      params: {
+        name: e.name,
+        date: e.dates.start.localDate,
+        venue: e._embedded.venues[0].name,
+        image: e.images[0]?.url,
+      },
+    });
   };
 
   useEffect(() => {
@@ -70,29 +83,31 @@ const Events = () => {
           data={events}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <View style={styles.eventCard}>
-              <Image
-                source={{ uri: item.images[0]?.url }}
-                style={styles.eventImage}
-              />
+            <TouchableOpacity onPress={() => handleEventPress(item)}>
+              <View style={styles.eventCard}>
+                <Image
+                  source={{ uri: item.images[0]?.url }}
+                  style={styles.eventImage}
+                />
 
-              <View style={styles.eventDetails}>
-                <Text style={styles.eventName}>{item.name}</Text>
-                <Text style={styles.eventDate}>
-                  {item.dates?.start?.localDate}
-                </Text>
-                <Text style={styles.eventVenue}>
-                  {item._embedded?.venues[0]?.name} ·{" "}
-                  {item._embedded?.venues[0]?.city?.name}
-                </Text>
+                <View style={styles.eventDetails}>
+                  <Text style={styles.eventName}>{item.name}</Text>
+                  <Text style={styles.eventDate}>
+                    {item.dates?.start?.localDate}
+                  </Text>
+                  <Text style={styles.eventVenue}>
+                    {item._embedded?.venues[0]?.name} ·{" "}
+                    {item._embedded?.venues[0]?.city?.name}
+                  </Text>
 
-                <View style={styles.attendees}>
-                  <Icon name="user" size={24} />
-                  <Icon name="user" size={24} style={styles.attendeeIcon} />
-                  <Icon name="user" size={24} style={styles.attendeeIcon} />
+                  <View style={styles.attendees}>
+                    <Icon name="user" size={24} />
+                    <Icon name="user" size={24} style={styles.attendeeIcon} />
+                    <Icon name="user" size={24} style={styles.attendeeIcon} />
+                  </View>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
         />
       </View>
