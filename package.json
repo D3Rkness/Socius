@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@react-native-picker/picker": "^2.8.0",
+    "date-fns": "^3.6.0",
     "react-native-picker": "^4.3.7",
     "react-native-select-dropdown": "^4.0.1"
   }

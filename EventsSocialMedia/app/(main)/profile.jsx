@@ -185,7 +185,7 @@ const UserHeader = ({ user, handleLayout }) => {
             </Pressable>
           </View>
           <View>
-            <Text style={styles.actualName}>Hongyu Zhao</Text>
+            <Text style={styles.actualName}>ILuvWaffles40</Text>
             <Text style={styles.userName}>{user && user.name}</Text>
           </View>
         </View>

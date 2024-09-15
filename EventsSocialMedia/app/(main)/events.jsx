@@ -14,6 +14,7 @@ import Icon from "../../assets/icons";
 import { theme } from "../../constants/theme";
 import { hp, wp } from "../../helpers/common";
 import { router } from "expo-router";
+import { format, parseISO } from "date-fns";
 
 const Events = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -42,6 +43,7 @@ const Events = () => {
       params: {
         name: e.name,
         date: e.dates.start.localDate,
+        time: e.dates.start.localDate,
         venue: e._embedded.venues[0].name,
         image: e.images[0]?.url,
       },
@@ -94,7 +96,14 @@ const Events = () => {
                   <Text style={styles.eventName}>{item.name}</Text>
                   <View style={styles.minorDetailsContainer}>
                     <Text style={styles.eventDate}>
-                      {item.dates?.start?.localDate}
+                      {format(
+                        parseISO(
+                          item.dates.start.localDate +
+                            "T" +
+                            item.dates.start.localTime
+                        ),
+                        "eee, MMM d ⋅ h:mma"
+                      )}
                     </Text>
                     <Text style={styles.eventVenue}>
                       {item._embedded?.venues[0]?.name} ·{" "}
@@ -182,7 +191,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
     paddingBottom: hp(1.5),
-    position: "relative", // Important for absolute positioning of attendees
+    position: "relative",
   },
   eventImage: {
     width: "100%",
@@ -209,9 +218,9 @@ const styles = StyleSheet.create({
   },
   attendeesContainer: {
     flexDirection: "row",
-    position: "absolute", // Position absolutely within the event card
-    bottom: 0, // Aligns the container to the bottom
-    right: 0, // Aligns the container to the right
+    position: "absolute",
+    bottom: 0,
+    right: 0,
   },
   attendeeAvatar: {
     width: wp(10),

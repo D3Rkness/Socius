@@ -13,6 +13,8 @@ import { theme } from "../../constants/theme";
 import Icon from "../../assets/icons";
 import { SvgUri } from "react-native-svg";
 import { useState } from "react";
+import { format, parseISO } from "date-fns";
+
 // import SelectDropdown from "react-native-select-dropdown";
 
 const Event = ({ route }) => {
@@ -21,7 +23,7 @@ const Event = ({ route }) => {
   const [selectedValue, setSelectedValue] = useState("option1");
 
   // Destructure the parameters passed via the router
-  const { name, date, venue, image } = params;
+  const { name, date, time, venue, image } = params;
   const dropdownOptions = ["Choice 1", "Choice 2", "Choice 3"];
 
   // Mock data for users attending or interested
@@ -77,13 +79,12 @@ const Event = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      {/* Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Icon name="arrowLeft" size={hp(3)} color={theme.colors.text} />
-      </TouchableOpacity>
-
       {/* Event Image */}
       <Image source={{ uri: image }} style={styles.eventImage} />
+
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+        <Icon name="arrowLeft" size={hp(5)} color={"white"} />
+      </TouchableOpacity>
 
       {/* Event Info */}
       <View style={styles.eventInfo}>
@@ -92,7 +93,9 @@ const Event = ({ route }) => {
         {/* Align Date, Venue and Interested */}
         <View style={styles.infoRow}>
           <View>
-            <Text style={styles.eventDate}>{date}</Text>
+            <Text style={styles.eventDate}>
+              {format(parseISO(date + "T" + time), "eee, MMM d ⋅ h:mma")}
+            </Text>
             <Text style={styles.eventVenue}>{venue}</Text>
           </View>
 
@@ -186,7 +189,7 @@ export default Event;
 const styles = StyleSheet.create({
   placeHolder: {
     color: theme.colors.textDark,
-    fontSize: hp(2.2),
+    fontSize: hp(1.8),
     fontWeight: "bold",
     paddingHorizontal: wp(2),
   },
@@ -206,8 +209,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: hp(2),
-    left: wp(2),
+    top: hp(5),
+    left: wp(5),
   },
   eventImage: {
     width: "100%",
