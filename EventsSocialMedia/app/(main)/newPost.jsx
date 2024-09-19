@@ -66,7 +66,6 @@ const NewPost = () => {
       return file.type;
     }
 
-    // check for remote file
     if (file.includes("postImages")) {
       return "image";
     }
@@ -96,7 +95,6 @@ const NewPost = () => {
     setLoading(true);
     let res = await createOrUpdatePost(data);
     setLoading(false);
-    // console.log("res Post : ", res);
 
     if (res.success) {
       setFile(null);

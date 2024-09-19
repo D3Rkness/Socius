@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router"; // Import useSearchParams to fetch the params
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { hp, wp } from "../../helpers/common";
 import { theme } from "../../constants/theme";
 import Icon from "../../assets/icons";
@@ -22,11 +22,9 @@ const Event = ({ route }) => {
   const params = useLocalSearchParams();
   const [selectedValue, setSelectedValue] = useState("option1");
 
-  // Destructure the parameters passed via the router
   const { name, date, time, venue, image } = params;
   const dropdownOptions = ["Choice 1", "Choice 2", "Choice 3"];
 
-  // Mock data for users attending or interested
   const goingUsers = [
     {
       id: 1,

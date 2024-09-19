@@ -22,27 +22,25 @@ const UserSearch = () => {
 
   useEffect(() => {
     getAllUsers().then((response) => {
-      setUsers(response.data); // Assume response.data contains the list of users
-      setFilteredUsers(response.data); // Initially display all users
+      setUsers(response.data);
+      setFilteredUsers(response.data);
     });
   }, []);
 
-  // Function to filter users based on search query
   const filterUsers = (query) => {
     setSearchQuery(query);
 
     if (query === "") {
-      setFilteredUsers(users); // Show all users if search is empty
+      setFilteredUsers(users);
     } else {
       const lowercasedQuery = query.toLowerCase();
-      const filtered = users.filter(
-        (user) => user.name.toLowerCase().includes(lowercasedQuery) // Filter users by name
+      const filtered = users.filter((user) =>
+        user.name.toLowerCase().includes(lowercasedQuery)
       );
       setFilteredUsers(filtered);
     }
   };
 
-  // Render user card
   const renderUserItem = ({ item }) => (
     <View style={styles.userCard}>
       <Image source={getUserImageSrc(item?.image)} style={styles.avatar} />
@@ -62,7 +60,7 @@ const UserSearch = () => {
               style={styles.input}
               placeholder="Search"
               value={searchQuery}
-              onChangeText={(query) => filterUsers(query)} // Filter users on input change
+              onChangeText={(query) => filterUsers(query)}
             />
             <TouchableOpacity onPress={() => setSearchQuery("")}>
               <Icon name="x" size={20} />
@@ -76,12 +74,12 @@ const UserSearch = () => {
 
         {/* User List */}
         <FlatList
-          data={filteredUsers} // Render filtered users
-          keyExtractor={(item) => item.id.toString()} // Assuming each user has a unique id
+          data={filteredUsers}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={renderUserItem}
           ListEmptyComponent={
             <Text style={styles.noResults}>No Users Found</Text>
-          } // Display if no users are found
+          }
         />
       </View>
     </ScreenWrapper>

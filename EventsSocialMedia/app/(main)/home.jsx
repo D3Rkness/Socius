@@ -1,9 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import ScreenWrapper from "../../components/ScreenWrapper";
-// import Button from "../../components/Button";
 import { useAuth } from "../../contexts/AuthContext";
-// import { supabase } from "../../lib/supabase";
 import { hp, wp } from "../../helpers/common";
 import { theme } from "../../constants/theme";
 import Icon from "../../assets/icons";
@@ -28,11 +26,9 @@ const Home = () => {
   const handlePostEvent = async (payload) => {
     if (payload.eventType === "INSERT" && payload?.new?.id) {
       let newPost = { ...payload.new };
-      // console.log("User ID in new post: ", newPost.userId);
 
       if (newPost.userId) {
         let res = await getUserData(newPost.userId);
-        // console.log("User data response: ", res);
 
         newPost.user = res.success ? res.data : {};
         setPosts((prevPosts) => [newPost, ...prevPosts]);
@@ -101,7 +97,6 @@ const Home = () => {
           )}
           onEndReached={() => {
             getPost();
-            // console.log("Reached End");
           }}
           onEndReachedThreshold={0}
           ListFooterComponent={
@@ -129,7 +124,6 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingHorizontal: wp(4)
   },
   header: {
     flexDirection: "row",
